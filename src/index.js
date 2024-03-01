@@ -31,12 +31,17 @@ var state_js_1 = require("./state.js");
 var react_redux_1 = require("react-redux");
 var react_1 = __importStar(require("react"));
 var react_dom_1 = __importDefault(require("react-dom"));
-console.log("Hello World!");
-var Button = function (props) {
+var ButtonWrapper = function (props) {
+    return (react_1.default.createElement("div", { className: "button-wrapper" },
+        react_1.default.createElement("a", { className: 'button-wrapper_tweet', href: "twitter.com/intent/tweet", target: '_blank', id: "tweet-quote" }, "Tweety"),
+        react_1.default.createElement("button", { className: 'button-wrapper_new', id: "new-quote", onClick: props.parentProps.getRandomQuote }, "Test")));
+};
+var QuoteBox = function (props) {
     return (react_1.default.createElement("div", { id: "quote-box", className: 'quote-box' },
-        react_1.default.createElement("button", { onClick: store.dispatch(state_js_1.GetRandomQuote) }, "Test"),
-        react_1.default.createElement("h3", null, props.author),
-        react_1.default.createElement("p", null, props.quote)));
+        react_1.default.createElement("div", null,
+            react_1.default.createElement("h3", { id: 'author', className: 'quote-box__author' }, props.author),
+            react_1.default.createElement("p", { id: 'text', className: 'quote-box__quote' }, props.quote)),
+        react_1.default.createElement(ButtonWrapper, { parentProps: props })));
 };
 var AppWrapper = function (props) {
     console.log(props);
@@ -62,5 +67,5 @@ var mapDispatchToProps = function (dispatch) {
         getRandomQuote: function () { return dispatch((0, state_js_1.GetRandomQuote)()); }
     };
 };
-var Container = (0, react_redux_1.connect)(mapStateToProps, mapDispatchToProps)(Button);
+var Container = (0, react_redux_1.connect)(mapStateToProps, mapDispatchToProps)(QuoteBox);
 react_dom_1.default.render(react_1.default.createElement(AppWrapper, null), document.querySelector('#wrapper'));
