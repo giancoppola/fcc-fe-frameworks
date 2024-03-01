@@ -1,0 +1,16 @@
+body {
+  margin: 0;
+}
+
+.wrapper {
+  width: 100dvw;
+  height: 100dvh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: lightcyan;
+}
+
+.quote-box {
+  background: white;
+}/*# sourceMappingURL=styles.css.map */
