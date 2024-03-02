@@ -26,8 +26,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var store = require('./state.js').default;
-var state_js_1 = require("./state.js");
+var store = require('./quote-state.js').default;
+var quote_state_js_1 = require("./quote-state.js");
 var react_redux_1 = require("react-redux");
 var react_1 = __importStar(require("react"));
 var react_dom_1 = __importDefault(require("react-dom"));
@@ -48,7 +48,7 @@ var AppWrapper = function (props) {
     (0, react_1.useEffect)(function () {
         console.log('mounted');
         // @ts-ignore
-        store.dispatch((0, state_js_1.GetRandomQuote)());
+        store.dispatch((0, quote_state_js_1.GetRandomQuote)());
         console.log(props);
     });
     return (react_1.default.createElement(react_redux_1.Provider, { store: store },
@@ -64,7 +64,7 @@ var mapStateToProps = function (state) {
 var mapDispatchToProps = function (dispatch) {
     return {
         // @ts-ignore
-        getRandomQuote: function () { return dispatch((0, state_js_1.GetRandomQuote)()); }
+        getRandomQuote: function () { return dispatch((0, quote_state_js_1.GetRandomQuote)()); }
     };
 };
 var Container = (0, react_redux_1.connect)(mapStateToProps, mapDispatchToProps)(QuoteBox);

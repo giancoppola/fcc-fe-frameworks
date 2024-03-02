@@ -8,10 +8,10 @@ app.use('/styles', express.static(__dirname + '/styles'));
 app.use(express.static(__dirname + '/src'));
 
 app.get('/', (req, res) => {
-    res.sendFile('/index.html')
+    res.sendFile(__dirname + '/views/markdown.html')
 })
 app.get('/quotes', (req, res) => {
-    res.sendFile('/index.html')
+    res.sendFile(__dirname + '/views/quotes.html')
 })
 
 app.listen(3000, () => console.log('listening'));

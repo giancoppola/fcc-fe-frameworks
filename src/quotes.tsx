@@ -1,7 +1,7 @@
 import Redux, { Dispatch, Store, legacy_createStore } from 'redux';
 import { ThunkMiddleware } from 'redux-thunk';
-const store: Store = require('./state.js').default;
-import {GetRandomQuote, iState} from './state.js';
+const store: Store = require('./quote-state.js').default;
+import {GetRandomQuote, iState} from './quote-state.js';
 import {ConnectedProps, Provider, connect} from 'react-redux';
 import React, {useState, useEffect} from 'react';
 import ReactDOM from 'react-dom';
