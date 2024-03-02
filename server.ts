@@ -8,6 +8,9 @@ app.use('/styles', express.static(__dirname + '/styles'));
 app.use(express.static(__dirname + '/src'));
 
 app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/views/drums.html')
+})
+app.get('/markdown', (req, res) => {
     res.sendFile(__dirname + '/views/markdown.html')
 })
 app.get('/quotes', (req, res) => {

@@ -1,6 +1,6 @@
 import Redux, { Dispatch, Store, legacy_createStore } from 'redux';
-const store: Store = require('./markdown-state.js').default;
-import {updateText} from './markdown-state.js';
+const store: Store = require('./drums-state.js').default;
+import {updatePlaying, updateSamples, updateVolume, iState} from './drums-state.js';
 import {ConnectedProps, MapStateToProps, Provider, connect} from 'react-redux';
 import React, {useState, useEffect, PropsWithoutRef} from 'react';
 import ReactDOM from 'react-dom';
@@ -54,14 +54,16 @@ const AppWrapper = (props: any) => {
     )
 }
 
-const mapStateToProps: MapStateToProps<any, any, string> = (state: string) => {
+const mapStateToProps: MapStateToProps<any, any, iState> = (state: iState) => {
     return {
-        current: state,
+        playing: state.playing,
+        volume: state.volume,
+        samples: state.samples
     }
 }
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        updateText: (text: string) => dispatch(updateText(text))
+        // updateText: (text: string) => dispatch(updateText(text))
     }
 }
 

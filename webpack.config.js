@@ -4,7 +4,8 @@ module.exports = {
     mode: 'development',
     entry: {
         quotes: './src/quotes.js',
-        markdown: './src/markdown.js'
+        markdown: './src/markdown.js',
+        drums: './src/drums.js',
     },
     output: {
         filename: '[name].bundle.js',

@@ -26,8 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var store = require('./markdown-state.js').default;
-var markdown_state_js_1 = require("./markdown-state.js");
+var store = require('./drums-state.js').default;
 var react_redux_1 = require("react-redux");
 var react_1 = __importStar(require("react"));
 var react_dom_1 = __importDefault(require("react-dom"));
@@ -69,7 +68,7 @@ var mapStateToProps = function (state) {
 };
 var mapDispatchToProps = function (dispatch) {
     return {
-        updateText: function (text) { return dispatch((0, markdown_state_js_1.updateText)(text)); }
+    // updateText: (text: string) => dispatch(updateText(text))
     };
 };
 var Container = (0, react_redux_1.connect)(mapStateToProps, mapDispatchToProps)(App);
