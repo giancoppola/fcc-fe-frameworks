@@ -15,7 +15,7 @@ export interface DrumAction extends Action {
 }
 
 // states
-interface iSample {
+export interface iSample {
     key: string,
     audio: string,
 }
@@ -48,7 +48,7 @@ export const updateVolume = (volume: number) => {
         volume: volume
     }
 }
-export const updatePlaying = (playing: number) => {
+export const updatePlaying = (playing: string) => {
     return {
         type: VOLUME,
         volume: playing

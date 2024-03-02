@@ -1,6 +1,6 @@
 import Redux, { Dispatch, Store, legacy_createStore } from 'redux';
 const store: Store = require('./drums-state.js').default;
-import {updatePlaying, updateSamples, updateVolume, iState} from './drums-state.js';
+import {updatePlaying, updateSamples, updateVolume, iState, iSample} from './drums-state.js';
 import {ConnectedProps, MapStateToProps, Provider, connect} from 'react-redux';
 import React, {useState, useEffect, PropsWithoutRef} from 'react';
 import ReactDOM from 'react-dom';
@@ -63,7 +63,9 @@ const mapStateToProps: MapStateToProps<any, any, iState> = (state: iState) => {
 }
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        // updateText: (text: string) => dispatch(updateText(text))
+        updatePlaying: (text: string) => dispatch(updatePlaying(text)),
+        updateVolume: (volume: number) => dispatch(updateVolume(volume)),
+        updateSamples: (samples: Array<iSample>) => dispatch(updateSamples(samples))
     }
 }
 
