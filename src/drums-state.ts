@@ -18,6 +18,7 @@ export interface DrumAction extends Action {
 export interface iSample {
     key: string,
     audio: string,
+    name: string
 }
 export interface iState {
     playing: string,
@@ -25,15 +26,15 @@ export interface iState {
     samples: Array<iSample>
 }
 const defaultSamples: Array<iSample> = [
-    {key: 'Q', audio: 'Heater-1.mp3'},
-    {key: 'W', audio: 'Heater-2.mp3'},
-    {key: 'E', audio: 'Heater-3.mp3'},
-    {key: 'A', audio: 'Heater-4.mp3'},
-    {key: 'S', audio: 'Heater-6.mp3'},
-    {key: 'D', audio: 'Dsc_Oh.mp3'},
-    {key: 'Z', audio: 'Kick_n_Hat.mp3'},
-    {key: 'X', audio: 'RP4_KICK_1.mp3'},
-    {key: 'C', audio: 'Cev_H2.mp3'},
+    {key: 'Q', audio: '../sounds/Heater-1.mp3', name: 'Heater 1'},
+    {key: 'W', audio: '../sounds/Heater-2.mp3', name: 'Heater 2'},
+    {key: 'E', audio: '../sounds/Heater-3.mp3', name: 'Heater 3'},
+    {key: 'A', audio: '../sounds/Heater-4.mp3', name: 'Heater 4'},
+    {key: 'S', audio: '../sounds/Heater-6.mp3', name: 'Clap'},
+    {key: 'D', audio: '../sounds/Dsc_Oh.mp3', name: 'Open HH'},
+    {key: 'Z', audio: '../sounds/Kick_n_Hat.mp3', name: 'Kick and Hat'},
+    {key: 'X', audio: '../sounds/RP4_KICK_1.mp3', name: 'Kick'},
+    {key: 'C', audio: '../sounds/Cev_H2.mp3', name: 'Closed HH'},
 ]
 export const defaultState: iState = {
     playing: '',
@@ -50,8 +51,8 @@ export const updateVolume = (volume: number) => {
 }
 export const updatePlaying = (playing: string) => {
     return {
-        type: VOLUME,
-        volume: playing
+        type: PLAYING,
+        playing: playing
     }
 }
 export const updateSamples = (samples: Array<iSample>) => {
@@ -66,14 +67,20 @@ const reducer = (state: iState = defaultState, action: DrumAction) => {
     switch(action.type){
         case VOLUME:
             return {
-                volume: action.volume
+                playing: state.playing,
+                volume: action.volume,
+                samples: state.samples
             };
         case PLAYING:
             return {
-                playing: action.playing
+                playing: action.playing,
+                volume: state.volume,
+                samples: state.samples
             };
         case SAMPLES: {
             return {
+                playing: state.playing,
+                volume: state.volume,
                 samples: action.samples
             }
         }

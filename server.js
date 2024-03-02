@@ -5,6 +5,7 @@ var app = express();
 // static files
 app.use('/dist', express.static(__dirname + '/dist'));
 app.use('/styles', express.static(__dirname + '/styles'));
+app.use('/sounds', express.static(__dirname + '/sounds'));
 app.use(express.static(__dirname + '/src'));
 app.get('/', function (req, res) {
     res.sendFile(__dirname + '/views/drums.html');
