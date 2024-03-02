@@ -31,6 +31,7 @@ var markdown_state_js_1 = require("./markdown-state.js");
 var react_redux_1 = require("react-redux");
 var react_1 = __importStar(require("react"));
 var react_dom_1 = __importDefault(require("react-dom"));
+var marked = require('marked');
 var Editor = function (props) {
     console.log(props);
     (0, react_1.useEffect)(function () {
@@ -41,11 +42,15 @@ var Editor = function (props) {
         });
     }, []);
     return (react_1.default.createElement("div", { className: "editor-wrapper", id: "editor-wrapper" },
-        react_1.default.createElement("textarea", { name: "editor", id: "editor", cols: 30, rows: 10, className: "editor" }, props.current)));
+        react_1.default.createElement("textarea", { name: "editor", id: "editor", cols: 100, rows: 50, className: "editor" }, props.current)));
 };
 var Preview = function (props) {
+    (0, react_1.useEffect)(function () {
+        var preview = document.querySelector('#preview');
+        preview.innerHTML = marked.parse(props.current);
+    });
     return (react_1.default.createElement("div", { className: "preview-wrapper", id: "preview-wrapper" },
-        react_1.default.createElement("div", { className: "preview", id: "preview" }, props.current)));
+        react_1.default.createElement("div", { className: "preview", id: "preview" })));
 };
 var ButtonWrapper = function (props) {
     return (react_1.default.createElement("div", { className: "button-wrapper" },

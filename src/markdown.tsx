@@ -4,6 +4,7 @@ import {updateText} from './markdown-state.js';
 import {ConnectedProps, MapStateToProps, Provider, connect} from 'react-redux';
 import React, {useState, useEffect, PropsWithoutRef} from 'react';
 import ReactDOM from 'react-dom';
+const marked = require('marked')
 
 
 const Editor = (props: any) => {
@@ -17,16 +18,19 @@ const Editor = (props: any) => {
     }, []);
     return (
         <div className="editor-wrapper" id="editor-wrapper">
-            <textarea name="editor" id="editor" cols={30} rows={10} className="editor">{props.current}</textarea>
+            <textarea name="editor" id="editor" cols={100} rows={50} className="editor">{props.current}</textarea>
         </div>
     )
 }
 
 const Preview = (props: any) => {
+    useEffect(() => {
+        let preview = document.querySelector('#preview');
+        preview.innerHTML = marked.parse(props.current)
+    })
     return (
         <div className="preview-wrapper" id="preview-wrapper">
             <div className="preview" id="preview">
-                {props.current}
             </div>
         </div>
     )
