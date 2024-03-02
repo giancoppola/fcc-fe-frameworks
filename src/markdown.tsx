@@ -5,6 +5,34 @@ import {ConnectedProps, MapStateToProps, Provider, connect} from 'react-redux';
 import React, {useState, useEffect, PropsWithoutRef} from 'react';
 import ReactDOM from 'react-dom';
 
+
+const Editor = (props: any) => {
+    console.log(props);
+    useEffect( () => {
+        console.log('fired')
+        let textArea: HTMLTextAreaElement = document.querySelector('#editor');
+        textArea.addEventListener("keyup", (e) => {
+            props.updateText((e.target as HTMLTextAreaElement).value);
+        })
+    }, []);
+    return (
+        <div className="editor-wrapper" id="editor-wrapper">
+            <textarea name="editor" id="editor" cols={30} rows={10} className="editor">{props.current}</textarea>
+        </div>
+    )
+}
+
+const Preview = (props: any) => {
+    return (
+        <div className="preview-wrapper" id="preview-wrapper">
+            <div className="preview" id="preview">
+                {props.current}
+            </div>
+        </div>
+    )
+}
+
+
 const ButtonWrapper = (props: any) => {
     return (
         <div className="button-wrapper">
@@ -15,19 +43,16 @@ const ButtonWrapper = (props: any) => {
 }
 
 const App = (props: any) => {
+    console.log(props);
     return (
-        <div id="quote-box" className='quote-box'>
-            <div>
-                <h3 id='author' className='quote-box__author'>{props.author}</h3>
-                <p id='text' className='quote-box__quote'>{props.quote}</p>
-            </div>
-            <ButtonWrapper parentProps={props}/>
-        </div>
+        <>
+            <Editor current={props.current} updateText={props.updateText}/>
+            <Preview current={props.current}/>
+        </>
     )
 }
 
 const AppWrapper = (props: any) => {
-    console.log(props);
     return (
         <Provider store={store}>
             <Container />
@@ -40,12 +65,11 @@ const mapStateToProps: MapStateToProps<any, any, string> = (state: string) => {
         current: state,
     }
 }
-const mapDispatchToProps = (dispatch: Dispatch, ownProps: any) => {
+const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        // @ts-ignore
-        getRandomQuote: () => dispatch(updateText(ownProps.text))
+        updateText: (text: string) => dispatch(updateText(text))
     }
 }
 
 const Container = connect(mapStateToProps, mapDispatchToProps)(App);
-ReactDOM.render(<AppWrapper/>, document.querySelector('#wrapper'));
+ReactDOM.render(<AppWrapper/>, document.querySelector('#main'));
