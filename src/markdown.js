@@ -52,11 +52,6 @@ var Preview = function (props) {
     return (react_1.default.createElement("div", { className: "preview-wrapper", id: "preview-wrapper" },
         react_1.default.createElement("div", { className: "preview", id: "preview" })));
 };
-var ButtonWrapper = function (props) {
-    return (react_1.default.createElement("div", { className: "button-wrapper" },
-        react_1.default.createElement("a", { className: 'button-wrapper_tweet', href: "twitter.com/intent/tweet", target: '_blank', id: "tweet-quote" }, "Tweety"),
-        react_1.default.createElement("button", { className: 'button-wrapper_new', id: "new-quote", onClick: props.parentProps.getRandomQuote }, "Test")));
-};
 var App = function (props) {
     console.log(props);
     return (react_1.default.createElement(react_1.default.Fragment, null,
