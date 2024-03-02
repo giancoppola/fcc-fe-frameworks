@@ -36,16 +36,6 @@ const Preview = (props: any) => {
     )
 }
 
-
-const ButtonWrapper = (props: any) => {
-    return (
-        <div className="button-wrapper">
-            <a className='button-wrapper_tweet' href="twitter.com/intent/tweet" target='_blank' id="tweet-quote">Tweety</a>
-            <button className='button-wrapper_new' id="new-quote" onClick={props.parentProps.getRandomQuote}>Test</button>
-        </div>
-    )
-}
-
 const App = (props: any) => {
     console.log(props);
     return (
