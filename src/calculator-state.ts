@@ -4,86 +4,50 @@ import { UseDispatch } from 'react-redux';
 const QUOTE_URL = 'https://gist.githubusercontent.com/camperbot/5a022b72e96c4c9585c32bf6a75f62d9/raw/e3c6895ce42069f0ee7e991229064f167fe8ccdc/quotes.json';
 
 // action types
-export const VOLUME = 'VOLUME';
-export const PLAYING = 'PLAYING';
-export const SAMPLES = 'SAMPLES';
-export interface DrumAction extends Action {
+export const UPDATE = 'UPDATE';
+export interface CalcAction extends Action {
     type: string,
-    playing: string,
-    volume: number,
-    samples: Array<iSample>
+    formula: string,
+    output: string,
 }
 
 // states
-export interface iSample {
-    key: string,
-    audio: string,
-    name: string
-}
 export interface iState {
-    playing: string,
-    volume: number,
-    samples: Array<iSample>
+    formula: string,
+    formulaHistory: Array<string>,
+    output: string,
+    outputHistory: Array<string>
 }
-const defaultSamples: Array<iSample> = [
-    {key: 'Q', audio: '../sounds/Heater-1.mp3', name: 'Heater 1'},
-    {key: 'W', audio: '../sounds/Heater-2.mp3', name: 'Heater 2'},
-    {key: 'E', audio: '../sounds/Heater-3.mp3', name: 'Heater 3'},
-    {key: 'A', audio: '../sounds/Heater-4.mp3', name: 'Heater 4'},
-    {key: 'S', audio: '../sounds/Heater-6.mp3', name: 'Clap'},
-    {key: 'D', audio: '../sounds/Dsc_Oh.mp3', name: 'Open HH'},
-    {key: 'Z', audio: '../sounds/Kick_n_Hat.mp3', name: 'Kick and Hat'},
-    {key: 'X', audio: '../sounds/RP4_KICK_1.mp3', name: 'Kick'},
-    {key: 'C', audio: '../sounds/Cev_H2.mp3', name: 'Closed HH'},
-]
 export const defaultState: iState = {
-    playing: '',
-    volume: 50,
-    samples: defaultSamples
+    formula: '',
+    formulaHistory: [],
+    output: '0',
+    outputHistory: []
 }
 
 // action creators
-export const updateVolume = (volume: number) => {
+export const update = (formula: string, output: string) => {
     return {
-        type: VOLUME,
-        volume: volume
-    }
-}
-export const updatePlaying = (playing: string) => {
-    return {
-        type: PLAYING,
-        playing: playing
-    }
-}
-export const updateSamples = (samples: Array<iSample>) => {
-    return {
-        type: SAMPLES,
-        samples: samples
+        type: UPDATE,
+        formula: formula,
+        output: output
     }
 }
 
 // reducer
-const reducer = (state: iState = defaultState, action: DrumAction) => {
+const reducer = (state: iState = defaultState, action: CalcAction) => {
     switch(action.type){
-        case VOLUME:
+        case UPDATE:
+            let newFormula = [...state.formulaHistory];
+            newFormula.push(action.formula);
+            let newOutput = [...state.outputHistory];
+            newOutput.push(action.output);
             return {
-                playing: state.playing,
-                volume: action.volume,
-                samples: state.samples
+                formula: action.formula,
+                formulaHistory: newFormula,
+                output: action.output,
+                outputHistory: newOutput
             };
-        case PLAYING:
-            return {
-                playing: action.playing,
-                volume: state.volume,
-                samples: state.samples
-            };
-        case SAMPLES: {
-            return {
-                playing: state.playing,
-                volume: state.volume,
-                samples: action.samples
-            }
-        }
     }
     return defaultState;
 }

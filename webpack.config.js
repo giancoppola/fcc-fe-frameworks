@@ -6,6 +6,7 @@ module.exports = {
         quotes: './src/quotes.js',
         markdown: './src/markdown.js',
         drums: './src/drums.js',
+        calculator: './src/calculator.js',
     },
     output: {
         filename: '[name].bundle.js',

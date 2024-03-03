@@ -8,6 +8,9 @@ app.use('/styles', express.static(__dirname + '/styles'));
 app.use('/sounds', express.static(__dirname + '/sounds'));
 app.use(express.static(__dirname + '/src'));
 app.get('/', function (req, res) {
+    res.sendFile(__dirname + '/views/calculator.html');
+});
+app.get('/drums', function (req, res) {
     res.sendFile(__dirname + '/views/drums.html');
 });
 app.get('/markdown', function (req, res) {
