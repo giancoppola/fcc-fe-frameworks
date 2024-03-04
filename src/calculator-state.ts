@@ -57,7 +57,10 @@ export const equals = () => {
 const reducer = (state: iState = defaultState, action: CalcAction) => {
     switch(action.type){
         case NUMBER:
+            // if current output is once of the below, it should be overwritten
             let diff = ['0', '+', '-', 'x', '/'];
+            // don't allow more than one decimal
+            action.current == "." && state.output.includes('.') ? action.current = '' : action.current;
             let newFormula = state.formula == '0' ? action.current : state.formula + action.current
             let newFormulaHistory = [...state.formulaHistory];
             newFormulaHistory.push(newFormula);

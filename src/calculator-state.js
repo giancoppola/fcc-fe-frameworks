@@ -72,6 +72,7 @@ var reducer = function (state, action) {
     switch (action.type) {
         case exports.NUMBER:
             var diff = ['0', '+', '-', 'x', '/'];
+            action.current == "." && state.output.includes('.') ? action.current = '' : action.current;
             var newFormula = state.formula == '0' ? action.current : state.formula + action.current;
             var newFormulaHistory = __spreadArray([], __read(state.formulaHistory), false);
             newFormulaHistory.push(newFormula);
