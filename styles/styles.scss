@@ -1,5 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
+@mixin calc-btn{
+    border: 2px solid black;
+    background: gray;
+    font-size: 2rem;
+    font-weight: bold;
+    cursor: pointer;
+    &:active{
+        background: lightgoldenrodyellow;
+    }
+}
+
 *{
     font-family: "Poppins", sans-serif;
 }
@@ -131,5 +142,62 @@ body {
             min-width: 100%;
             text-align: center;
         }
+    }
+}
+.calculator{
+    width: 50dvw;
+    height: 50dvh;
+    display: flex;
+    flex-direction: column;
+    .formula-display{
+        height: 15%;
+        background: black;
+        color: goldenrod;
+        font-weight: bold;
+        font-size: 3rem;
+    }
+    .output-display{
+        height: 15%;
+        background: black;
+        color: white;
+        font-weight: bold;
+        font-size: 3rem;
+    }
+    .controls{
+        height: 70%;
+    }
+}
+.controls{
+    display: grid;
+    grid-template-areas:
+        "a a b c"
+        "e f g h"
+        "i j k n"
+        "p q r l"
+        "m m o l"
+    ;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    border: 2px solid black;
+    .btn{
+        @include calc-btn;
+        &--light{
+            background: lightgrey;
+        }
+        &--blue{
+            background: lightblue;
+        }
+        &--red{
+            background: lightcoral;
+        }
+    }
+    .AC{
+        grid-area: a;
+    }
+    .zero{
+        grid-area: m;
+    }
+    .equals{
+        grid-area: l;
     }
 }

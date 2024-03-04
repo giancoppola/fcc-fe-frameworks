@@ -135,4 +135,64 @@ body {
   min-height: 2rem;
   min-width: 100%;
   text-align: center;
+}
+
+.calculator {
+  width: 50dvw;
+  height: 50dvh;
+  display: flex;
+  flex-direction: column;
+}
+.calculator .formula-display {
+  height: 15%;
+  background: black;
+  color: goldenrod;
+  font-weight: bold;
+  font-size: 3rem;
+}
+.calculator .output-display {
+  height: 15%;
+  background: black;
+  color: white;
+  font-weight: bold;
+  font-size: 3rem;
+}
+.calculator .controls {
+  height: 70%;
+}
+
+.controls {
+  display: grid;
+  grid-template-areas: "a a b c" "e f g h" "i j k n" "p q r l" "m m o l";
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  border: 2px solid black;
+}
+.controls .btn {
+  border: 2px solid black;
+  background: gray;
+  font-size: 2rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+.controls .btn:active {
+  background: lightgoldenrodyellow;
+}
+.controls .btn--light {
+  background: lightgrey;
+}
+.controls .btn--blue {
+  background: lightblue;
+}
+.controls .btn--red {
+  background: lightcoral;
+}
+.controls .AC {
+  grid-area: a;
+}
+.controls .zero {
+  grid-area: m;
+}
+.controls .equals {
+  grid-area: l;
 }/*# sourceMappingURL=styles.css.map */
