@@ -1,3 +1,4 @@
+const math = require('mathjs')
 import { GetState } from '@reduxjs/toolkit';
 import Redux, { Action, Store, legacy_createStore, Dispatch, Middleware, applyMiddleware, UnknownAction } from 'redux';
 import { UseDispatch } from 'react-redux';
@@ -43,11 +44,13 @@ export const action = (current: string) => {
     }
 }
 export const clear = () => {
+    console.log('clear action creator')
     return {
         type: CLEAR,
     }
 }
 export const equals = () => {
+    console.log('clear?')
     return {
         type: EQUALS,
     }
@@ -55,13 +58,15 @@ export const equals = () => {
 
 // reducer
 const reducer = (state: iState = defaultState, action: CalcAction) => {
+    console.log(action);
     switch(action.type){
-        case NUMBER:
+        case NUMBER: {
             // if current output is once of the below, it should be overwritten
-            let diff = ['0', '+', '-', 'x', '/'];
+            let diff = ['0', '+', '-', '*', '/'];
             // don't allow more than one decimal
             action.current == "." && state.output.includes('.') ? action.current = '' : action.current;
-            let newFormula = state.formula == '0' ? action.current : state.formula + action.current
+            let newFormula = state.formula == '0' ? action.current : state.formula + action.current;
+            newFormula.includes("=") ? newFormula = newFormula.split("= ")[1] : newFormula;
             let newFormulaHistory = [...state.formulaHistory];
             newFormulaHistory.push(newFormula);
             let newOutput = diff.includes(state.output) ? action.current : state.output + action.current;
@@ -73,8 +78,12 @@ const reducer = (state: iState = defaultState, action: CalcAction) => {
                 output: newOutput,
                 outputHistory: newOutputHistory
             };
-        case ACTION:
+        }
+        case ACTION: {
+            let diff = ['+', '*', '/']
+            diff.includes(state.formula.slice(-1)) && action.current != '-' ? state.formula = state.formula.slice(0, state.formula.length -1) : state.formula;
             let newForm = state.formula + action.current
+            newForm.includes('=') ? newForm = newForm.split('= ')[1] : newForm;
             let newFormHistory = [...state.formulaHistory];
             newFormHistory.push(newForm);
             let newOut = action.current;
@@ -86,10 +95,26 @@ const reducer = (state: iState = defaultState, action: CalcAction) => {
                 output: newOut,
                 outputHistory: newOutHistory
             };
-        case EQUALS:
+        }
+        case EQUALS: {
+            let res = math.evaluate(state.formula);
+            console.log(res);
+            let newForm = state.formula + action.current
+            let newFormHistory = [...state.formulaHistory];
+            newFormHistory.push(newForm);
+            let newOut = action.current;
+            let newOutHistory = [...state.outputHistory];
+            newOutHistory.push(newOut);
+            return {
+                formula: state.formula + "= " + res,
+                formulaHistory: newFormHistory,
+                output: res,
+                outputHistory: newOutHistory
+            }
+        }
+        case CLEAR: {
             return defaultState;
-        case CLEAR:
-            return defaultState;
+        }
     }
     return defaultState;
 }

@@ -82,6 +82,7 @@ var Controls = function (props) {
         }
         var clear = document.querySelector('#clear');
         clear.addEventListener('click', function (e) {
+            console.log('clear');
             props.clear();
         });
         var equals = document.querySelector('#equals');
@@ -92,7 +93,7 @@ var Controls = function (props) {
     return (react_1.default.createElement("div", { className: "controls", id: "controls" },
         react_1.default.createElement("button", { id: "clear", value: 'AC', className: "AC btn btn--red" }, "AC"),
         react_1.default.createElement("button", { className: 'action btn btn--light', id: "divide", value: "/" }, "/"),
-        react_1.default.createElement("button", { className: 'action btn btn--light', id: "multiply", value: "x" }, "x"),
+        react_1.default.createElement("button", { className: 'action btn btn--light', id: "multiply", value: "*" }, "x"),
         react_1.default.createElement("button", { className: 'number btn', id: "seven", value: "7" }, "7"),
         react_1.default.createElement("button", { className: 'number btn', id: "eight", value: "8" }, "8"),
         react_1.default.createElement("button", { className: 'number btn', id: "nine", value: "9" }, "9"),
@@ -119,7 +120,7 @@ var App = function (props) {
     return (react_1.default.createElement("div", { id: "calculator", className: "calculator" },
         react_1.default.createElement(Formula, { formula: props.formula, output: props.output, update: props.update }),
         react_1.default.createElement(Output, { formula: props.formula, output: props.output, update: props.update }),
-        react_1.default.createElement(Controls, { action: props.action, number: props.number, equals: props.equals, clear: props.equals })));
+        react_1.default.createElement(Controls, { action: props.action, number: props.number, equals: props.equals, clear: props.clear })));
 };
 var AppWrapper = function (props) {
     return (react_1.default.createElement(react_redux_1.Provider, { store: store },

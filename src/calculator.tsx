@@ -25,6 +25,7 @@ const Controls = (props: any) => {
         }
         let clear: HTMLButtonElement = document.querySelector('#clear');
         clear.addEventListener('click', (e) => {
+            console.log('clear');
             props.clear();
         })
         let equals: HTMLButtonElement = document.querySelector('#equals');
@@ -36,7 +37,7 @@ const Controls = (props: any) => {
         <div className="controls" id="controls">
             <button id="clear" value='AC' className="AC btn btn--red">AC</button>
             <button className='action btn btn--light' id="divide" value="/">/</button>
-            <button className='action btn btn--light' id="multiply" value="x">x</button>
+            <button className='action btn btn--light' id="multiply" value="*">x</button>
             <button className='number btn' id="seven" value="7">7</button>
             <button className='number btn' id="eight" value="8">8</button>
             <button className='number btn' id="nine" value="9">9</button>
@@ -75,7 +76,7 @@ const App = (props: any) => {
         <div id="calculator" className="calculator">
             <Formula formula={props.formula} output={props.output} update={props.update}/>
             <Output formula={props.formula} output={props.output} update={props.update}/>
-            <Controls action={props.action} number={props.number} equals={props.equals} clear={props.equals}/>
+            <Controls action={props.action} number={props.number} equals={props.equals} clear={props.clear}/>
         </div>
     )
 }
