@@ -155,6 +155,10 @@ body {
         color: goldenrod;
         font-weight: bold;
         font-size: 3rem;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        padding-right: 1rem;
     }
     .output-display{
         height: 15%;
@@ -162,6 +166,10 @@ body {
         color: white;
         font-weight: bold;
         font-size: 3rem;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        padding-right: 1rem;
     }
     .controls{
         height: 70%;
