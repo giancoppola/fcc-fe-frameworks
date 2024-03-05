@@ -7,6 +7,7 @@ module.exports = {
         markdown: './src/markdown.js',
         drums: './src/drums.js',
         calculator: './src/calculator.js',
+        clock: './src/clock.js',
     },
     output: {
         filename: '[name].bundle.js',
