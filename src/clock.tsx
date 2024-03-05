@@ -1,7 +1,7 @@
 
 import Redux, { Dispatch, Store, legacy_createStore } from 'redux';
 const store: Store = require('./clock-state.js').default;
-import {iState, equals, clear, number, action} from './clock-state.js';
+import {iState, start, pause, end, ready, READY, restart, START} from './clock-state.js';
 import {ConnectedProps, MapStateToProps, Provider, connect} from 'react-redux';
 import React, {useState, useEffect, PropsWithoutRef} from 'react';
 import ReactDOM from 'react-dom';
@@ -39,16 +39,33 @@ const Timer = (props: any) => {
         <div className="timer">
             <div className="timer-wrapper">
                 <h3 className="timer-label" id="timer-label">Session</h3>
-                <h3 className="timer-left" id="time-left">25:00</h3>
+                <h3 className="timer-left" id="time-left">{props.current}</h3>
             </div>
         </div>
     )
 }
 
 const TimerControls = (props: any) => {
+    useEffect(() => {
+        let startStop: HTMLButtonElement = document.querySelector('#start-stop');
+        startStop.addEventListener('click', (e) => {
+            switch((e.target as HTMLButtonElement).getAttribute('data-state')){
+                case READY:
+                    props.start(props.break, props.session, props.current);
+                    break;
+                case START:
+                    props.pause(props.break, props.session, props.current);
+                    break;
+            }
+        })
+        let reset: HTMLButtonElement = document.querySelector('#reset');
+        reset.addEventListener('click', (e) => {
+            props.restart();
+        })
+    }, [])
     return (
         <div className="timer-control">
-            <button id="start_stop">⏯️</button>
+            <button data-state={props.progress} id="start_stop">⏯️</button>
             <button id="reset">🔄</button>
         </div>
     )
@@ -59,9 +76,11 @@ const App = (props: any) => {
     return (
         <div id="app" className="app">
             <Title/>
-            <Controls/>
-            <Timer/>
-            <TimerControls/>
+            <Controls break={props.break} session={props.session}/>
+            <Timer current={props.current} progress={props.progress}/>
+            <TimerControls progress={props.progress} break={props.break}
+            session={props.session} current={props.current} end={props.end}
+            start={props.start} pause={props.pause} ready={props.ready}/>
         </div>
     )
 }
@@ -76,18 +95,19 @@ const AppWrapper = (props: any) => {
 
 const mapStateToProps: MapStateToProps<any, any, iState> = (state: iState) => {
     return {
-        formula: state.formula,
-        formulaHistory: state.formulaHistory,
-        output: state.output,
-        outputHistory: state.outputHistory
+        break: state.break,
+        session: state.session,
+        current: state.current,
+        progress: state.progress
     }
 }
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        number: (current: string) => dispatch(number(current)),
-        action: (current: string) => dispatch(action(current)),
-        clear: () => dispatch(clear()),
-        equals: () => dispatch(equals())
+        start: (brk: number, session: number, current: string) => dispatch(start(brk, session, current)),
+        pause: (brk: number, session: number, current: string) => dispatch(pause(brk, session, current)),
+        end: () => dispatch(end()),
+        restart: () => dispatch(restart()),
+        ready: (brk: number, session: number, current: string) => dispatch(ready(brk, session, current))
     }
 }
 
