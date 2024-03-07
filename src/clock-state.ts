@@ -3,6 +3,7 @@ import Redux, { Action, Store, legacy_createStore, Dispatch, Middleware, applyMi
 import { UseDispatch } from 'react-redux';
 
 // action types
+export const SET = 'SET';
 export const READY = 'READY';
 export const START = 'START';
 export const PAUSE = 'PAUSE';
@@ -31,6 +32,13 @@ export const defaultState: iState = {
 }
 
 // action creators
+export const set = (brk: number, session: number) => {
+    return {
+        type: SET,
+        break: brk,
+        session: session,
+    }
+}
 export const start = (brk: number, session: number, current: string) => {
     return {
         type: START,
@@ -75,6 +83,15 @@ export const ready = (brk: number, session: number, current: string) => {
 const reducer = (state: iState = defaultState, action: ClockAction) => {
     console.log(action);
     switch(action.type){
+        case SET: {
+            let current = `${action.session}:00`
+            return {
+                break: action.break,
+                session: action.session,
+                current: current,
+                progress: state.progress
+            }
+        }
         case START:
             return {
                 break: action.break,

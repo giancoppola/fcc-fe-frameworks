@@ -203,4 +203,8 @@ body {
 }
 .controls .equals {
   grid-area: l;
+}
+
+.time-controls {
+  display: flex;
 }/*# sourceMappingURL=styles.css.map */

@@ -112,7 +112,6 @@ var reducer = function (state, action) {
         }
         case exports.EQUALS: {
             var res = math.evaluate(state.formula);
-            state.formula == "5*-+5" ? res = 10 : res;
             console.log(res);
             var newForm = state.formula + action.current;
             var newFormHistory = __spreadArray([], __read(state.formulaHistory), false);
