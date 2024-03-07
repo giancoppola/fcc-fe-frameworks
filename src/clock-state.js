@@ -1,12 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.tick = exports.ready = exports.restart = exports.end = exports.pause = exports.breakTime = exports.sessionTime = exports.set = exports.defaultState = exports.END = exports.BREAK = exports.PAUSE = exports.SESSION = exports.READY = exports.SET = void 0;
+exports.tick = exports.ready = exports.restart = exports.end = exports.breakTime = exports.sessionTime = exports.set = exports.defaultState = exports.END = exports.BREAK = exports.SESSION = exports.READY = exports.SET = void 0;
 var redux_1 = require("redux");
 // action types
 exports.SET = 'SET';
 exports.READY = 'READY';
 exports.SESSION = 'SESSION';
-exports.PAUSE = 'PAUSE';
 exports.BREAK = 'BREAK';
 exports.END = 'END';
 var TICK = 'TICK';
@@ -42,15 +41,6 @@ var breakTime = function () {
     };
 };
 exports.breakTime = breakTime;
-var pause = function (brk, session) {
-    return {
-        type: exports.PAUSE,
-        break: brk,
-        session: session,
-        progress: exports.PAUSE
-    };
-};
-exports.pause = pause;
 var end = function () {
     return {
         type: exports.END,
@@ -118,14 +108,6 @@ var reducer = function (state, action) {
                 break: state.break,
                 session: state.session,
                 current: current,
-                progress: action.progress
-            };
-        }
-        case exports.PAUSE: {
-            return {
-                break: state.break,
-                session: state.session,
-                current: state.current,
                 progress: action.progress
             };
         }

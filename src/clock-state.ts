@@ -6,7 +6,6 @@ import { UseDispatch } from 'react-redux';
 export const SET = 'SET';
 export const READY = 'READY';
 export const SESSION = 'SESSION';
-export const PAUSE = 'PAUSE';
 export const BREAK = 'BREAK';
 export const END = 'END';
 const TICK = 'TICK';
@@ -53,14 +52,6 @@ export const breakTime = () => {
     return {
         type: BREAK,
         progress: BREAK
-    }
-}
-export const pause = (brk: number, session: number) => {
-    return {
-        type: PAUSE,
-        break: brk,
-        session: session,
-        progress: PAUSE
     }
 }
 export const end = () => {
@@ -126,14 +117,6 @@ const reducer = (state: iState = defaultState, action: ClockAction) => {
                 break: state.break,
                 session: state.session,
                 current: current,
-                progress: action.progress
-            }
-        }
-        case PAUSE: {
-            return {
-                break: state.break,
-                session: state.session,
-                current: state.current,
                 progress: action.progress
             }
         }
