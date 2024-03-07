@@ -1,11 +1,13 @@
 
 import Redux, { Dispatch, Store, legacy_createStore } from 'redux';
 const store: Store = require('./clock-state.js').default;
-import {iState, start, pause, end, ready, READY, restart, START, set} from './clock-state.js';
+import {iState, breakTime, pause, end, ready, READY, restart, set, END, PAUSE, tick, SESSION, BREAK, sessionTime} from './clock-state.js';
 import {ConnectedProps, MapStateToProps, Provider, connect} from 'react-redux';
 import React, {useState, useEffect, PropsWithoutRef} from 'react';
 import ReactDOM from 'react-dom';
 const marked = require('marked')
+
+const inProgress = [SESSION, PAUSE, BREAK];
 
 const Title = () => {
     return (
@@ -66,11 +68,15 @@ const Controls = (props: any) => {
 }
 
 const Timer = (props: any) => {
+    let current: string = (props.current / 60).toFixed(2).toString();
+    useEffect(() => {
+        current = Math.round(props.current / 60).toFixed(2).toString();
+    })
     return (
         <div className="timer">
             <div className="timer-wrapper">
                 <h3 className="timer-label" id="timer-label">Session</h3>
-                <h3 className="timer-left" id="time-left">{props.current}</h3>
+                <h3 className="timer-left" id="time-left">{current}</h3>
             </div>
         </div>
     )
@@ -82,9 +88,9 @@ const TimerControls = (props: any) => {
         startStop.addEventListener('click', (e) => {
             switch((e.target as HTMLButtonElement).getAttribute('data-state')){
                 case READY:
-                    props.start(props.break, props.session, props.current);
+                    props.sessionTime(props.break, props.session, props.current);
                     break;
-                case START:
+                case SESSION:
                     props.pause(props.break, props.session, props.current);
                     break;
             }
@@ -94,6 +100,13 @@ const TimerControls = (props: any) => {
             props.restart();
         })
     }, [])
+    useEffect(() => {
+        if (inProgress.includes(props.progress)){
+            setTimeout(() => {
+                props.tick();
+            }, 1000)
+        }
+    })
     return (
         <div className="timer-control">
             <button data-state={props.progress} id="start_stop">⏯️</button>
@@ -110,10 +123,10 @@ const App = (props: any) => {
             <Title/>
             <Controls break={props.break} session={props.session} set={props.set} progress={props.progress}/>
             <Timer current={props.current} progress={props.progress}/>
-            <TimerControls progress={props.progress} break={props.break}
-            session={props.session} current={props.current} end={props.end}
+            <TimerControls progress={props.progress} break={props.break} session={props.session}
+            sessionTime={props.sessionTime} current={props.current} end={props.end}
             start={props.start} pause={props.pause} ready={props.ready}
-            restart={props.restart}/>
+            restart={props.restart} tick={props.tick}/>
         </div>
     )
 }
@@ -137,11 +150,13 @@ const mapStateToProps: MapStateToProps<any, any, iState> = (state: iState) => {
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
         set: (brk: number, session: number) => dispatch(set(brk, session)),
-        start: (brk: number, session: number, current: string) => dispatch(start(brk, session, current)),
-        pause: (brk: number, session: number, current: string) => dispatch(pause(brk, session, current)),
+        sessionTime: (brk: number, session: number) => dispatch(sessionTime(brk, session)),
+        breakTime: () => dispatch(breakTime()),
+        pause: (brk: number, session: number) => dispatch(pause(brk, session)),
         end: () => dispatch(end()),
         restart: () => dispatch(restart()),
-        ready: (brk: number, session: number, current: string) => dispatch(ready(brk, session, current))
+        ready: (brk: number, session: number) => dispatch(ready(brk, session)),
+        tick: () => dispatch(tick())
     }
 }
 

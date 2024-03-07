@@ -1,18 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ready = exports.restart = exports.end = exports.pause = exports.start = exports.set = exports.defaultState = exports.END = exports.PAUSE = exports.START = exports.READY = exports.SET = void 0;
+exports.tick = exports.ready = exports.restart = exports.end = exports.pause = exports.breakTime = exports.sessionTime = exports.set = exports.defaultState = exports.END = exports.BREAK = exports.PAUSE = exports.SESSION = exports.READY = exports.SET = void 0;
 var redux_1 = require("redux");
 // action types
 exports.SET = 'SET';
 exports.READY = 'READY';
-exports.START = 'START';
+exports.SESSION = 'SESSION';
 exports.PAUSE = 'PAUSE';
+exports.BREAK = 'BREAK';
 exports.END = 'END';
+var TICK = 'TICK';
 var RESTART = 'RESTART';
 exports.defaultState = {
     break: 5,
     session: 25,
-    current: "25:00",
+    current: 1500,
     progress: exports.READY
 };
 // action creators
@@ -24,22 +26,27 @@ var set = function (brk, session) {
     };
 };
 exports.set = set;
-var start = function (brk, session, current) {
+var sessionTime = function (brk, session) {
     return {
-        type: exports.START,
+        type: exports.SESSION,
         break: brk,
         session: session,
-        current: current,
-        progress: exports.START
+        progress: exports.SESSION
     };
 };
-exports.start = start;
-var pause = function (brk, session, current) {
+exports.sessionTime = sessionTime;
+var breakTime = function () {
+    return {
+        type: exports.BREAK,
+        progress: exports.BREAK
+    };
+};
+exports.breakTime = breakTime;
+var pause = function (brk, session) {
     return {
         type: exports.PAUSE,
         break: brk,
         session: session,
-        current: current,
         progress: exports.PAUSE
     };
 };
@@ -58,23 +65,28 @@ var restart = function () {
     };
 };
 exports.restart = restart;
-var ready = function (brk, session, current) {
+var ready = function (brk, session) {
     return {
         type: exports.READY,
         break: brk,
         session: session,
-        current: current,
         progress: exports.READY
     };
 };
 exports.ready = ready;
+var tick = function () {
+    return {
+        type: TICK,
+    };
+};
+exports.tick = tick;
 // reducer
 var reducer = function (state, action) {
     if (state === void 0) { state = exports.defaultState; }
     console.log(action);
     switch (action.type) {
         case exports.SET: {
-            var current = "".concat(action.session, ":00");
+            var current = action.session * 60;
             return {
                 break: action.break,
                 session: action.session,
@@ -82,27 +94,50 @@ var reducer = function (state, action) {
                 progress: state.progress
             };
         }
-        case exports.START:
+        case TICK: {
+            var current = state.current - 1;
+            return {
+                break: state.break,
+                session: state.session,
+                current: current,
+                progress: state.progress
+            };
+        }
+        case exports.SESSION: {
+            var current = action.session * 60;
             return {
                 break: action.break,
                 session: action.session,
-                current: action.current,
+                current: current,
                 progress: action.progress
             };
-        case exports.PAUSE:
+        }
+        case exports.BREAK: {
+            var current = state.break * 60;
             return {
-                break: action.break,
-                session: action.session,
-                current: action.current,
+                break: state.break,
+                session: state.session,
+                current: current,
                 progress: action.progress
             };
-        case exports.END:
+        }
+        case exports.PAUSE: {
             return {
-                break: action.break,
-                session: action.session,
-                current: action.current,
+                break: state.break,
+                session: state.session,
+                current: state.current,
                 progress: action.progress
             };
+        }
+        case exports.END: {
+            var current = state.break * 60;
+            return {
+                break: state.break,
+                session: state.session,
+                current: current,
+                progress: action.progress
+            };
+        }
         case exports.READY:
             return exports.defaultState;
     }

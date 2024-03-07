@@ -5,15 +5,17 @@ import { UseDispatch } from 'react-redux';
 // action types
 export const SET = 'SET';
 export const READY = 'READY';
-export const START = 'START';
+export const SESSION = 'SESSION';
 export const PAUSE = 'PAUSE';
+export const BREAK = 'BREAK';
 export const END = 'END';
+const TICK = 'TICK';
 const RESTART = 'RESTART';
 export interface ClockAction extends Action {
     type: string,
     break: number,
     session: number,
-    current: string,
+    current: number,
     progress: string
 }
 
@@ -21,13 +23,13 @@ export interface ClockAction extends Action {
 export interface iState {
     break: number,
     session: number,
-    current: string,
+    current: number,
     progress: string
 }
 export const defaultState: iState = {
     break: 5,
     session: 25,
-    current: "25:00",
+    current: 1500,
     progress: READY
 }
 
@@ -39,21 +41,25 @@ export const set = (brk: number, session: number) => {
         session: session,
     }
 }
-export const start = (brk: number, session: number, current: string) => {
+export const sessionTime = (brk: number, session: number) => {
     return {
-        type: START,
+        type: SESSION,
         break: brk,
         session: session,
-        current: current,
-        progress: START
+        progress: SESSION
     }
 }
-export const pause = (brk: number, session: number, current: string) => {
+export const breakTime = () => {
+    return {
+        type: BREAK,
+        progress: BREAK
+    }
+}
+export const pause = (brk: number, session: number) => {
     return {
         type: PAUSE,
         break: brk,
         session: session,
-        current: current,
         progress: PAUSE
     }
 }
@@ -69,13 +75,17 @@ export const restart = () => {
         progress: READY
     }
 }
-export const ready = (brk: number, session: number, current: string) => {
+export const ready = (brk: number, session: number) => {
     return {
         type: READY,
         break: brk,
         session: session,
-        current: current,
         progress: READY
+    }
+}
+export const tick = () => {
+    return {
+        type: TICK,
     }
 }
 
@@ -84,7 +94,7 @@ const reducer = (state: iState = defaultState, action: ClockAction) => {
     console.log(action);
     switch(action.type){
         case SET: {
-            let current = `${action.session}:00`
+            let current = action.session * 60;
             return {
                 break: action.break,
                 session: action.session,
@@ -92,27 +102,50 @@ const reducer = (state: iState = defaultState, action: ClockAction) => {
                 progress: state.progress
             }
         }
-        case START:
+        case TICK: {
+            let current = state.current - 1;
+            return {
+                break: state.break,
+                session: state.session,
+                current: current,
+                progress: state.progress
+            }
+        }
+        case SESSION: {
+            let current = action.session * 60;
             return {
                 break: action.break,
                 session: action.session,
-                current: action.current,
+                current: current,
                 progress: action.progress
             }
-        case PAUSE:
+        }
+        case BREAK: {
+            let current = state.break * 60;
             return {
-                break: action.break,
-                session: action.session,
-                current: action.current,
+                break: state.break,
+                session: state.session,
+                current: current,
                 progress: action.progress
             }
-        case END:
+        }
+        case PAUSE: {
             return {
-                break: action.break,
-                session: action.session,
-                current: action.current,
+                break: state.break,
+                session: state.session,
+                current: state.current,
                 progress: action.progress
             }
+        }
+        case END: {
+            let current  = state.break * 60;
+            return {
+                break: state.break,
+                session: state.session,
+                current: current,
+                progress: action.progress
+            }
+        }
         case READY:
             return defaultState
     }

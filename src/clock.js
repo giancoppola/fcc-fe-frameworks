@@ -32,6 +32,7 @@ var react_redux_1 = require("react-redux");
 var react_1 = __importStar(require("react"));
 var react_dom_1 = __importDefault(require("react-dom"));
 var marked = require('marked');
+var inProgress = [clock_state_js_1.SESSION, clock_state_js_1.PAUSE, clock_state_js_1.BREAK];
 var Title = function () {
     return (react_1.default.createElement("h1", { className: "main-title", id: "main-title" }, "25 + 5 Clock"));
 };
@@ -80,10 +81,14 @@ var Controls = function (props) {
             react_1.default.createElement("button", { className: "btn btn--session", id: "session-increment", value: "+" }, "\u2191"))));
 };
 var Timer = function (props) {
+    var current = (props.current / 60).toFixed(2).toString();
+    (0, react_1.useEffect)(function () {
+        current = Math.round(props.current / 60).toFixed(2).toString();
+    });
     return (react_1.default.createElement("div", { className: "timer" },
         react_1.default.createElement("div", { className: "timer-wrapper" },
             react_1.default.createElement("h3", { className: "timer-label", id: "timer-label" }, "Session"),
-            react_1.default.createElement("h3", { className: "timer-left", id: "time-left" }, props.current))));
+            react_1.default.createElement("h3", { className: "timer-left", id: "time-left" }, current))));
 };
 var TimerControls = function (props) {
     (0, react_1.useEffect)(function () {
@@ -91,9 +96,9 @@ var TimerControls = function (props) {
         startStop.addEventListener('click', function (e) {
             switch (e.target.getAttribute('data-state')) {
                 case clock_state_js_1.READY:
-                    props.start(props.break, props.session, props.current);
+                    props.sessionTime(props.break, props.session, props.current);
                     break;
-                case clock_state_js_1.START:
+                case clock_state_js_1.SESSION:
                     props.pause(props.break, props.session, props.current);
                     break;
             }
@@ -103,9 +108,17 @@ var TimerControls = function (props) {
             props.restart();
         });
     }, []);
+    (0, react_1.useEffect)(function () {
+        if (inProgress.includes(props.progress)) {
+            setTimeout(function () {
+                props.tick();
+            }, 1000);
+        }
+    });
     return (react_1.default.createElement("div", { className: "timer-control" },
         react_1.default.createElement("button", { "data-state": props.progress, id: "start_stop" }, "\u23EF\uFE0F"),
-        react_1.default.createElement("button", { id: "reset" }, "\uD83D\uDD04")));
+        react_1.default.createElement("button", { id: "reset" }, "\uD83D\uDD04"),
+        react_1.default.createElement("audio", { id: "beep", preload: "auto", src: "https://cdn.freecodecamp.org/testable-projects-fcc/audio/BeepSound.wav" })));
 };
 var App = function (props) {
     console.log(props);
@@ -113,7 +126,7 @@ var App = function (props) {
         react_1.default.createElement(Title, null),
         react_1.default.createElement(Controls, { break: props.break, session: props.session, set: props.set, progress: props.progress }),
         react_1.default.createElement(Timer, { current: props.current, progress: props.progress }),
-        react_1.default.createElement(TimerControls, { progress: props.progress, break: props.break, session: props.session, current: props.current, end: props.end, start: props.start, pause: props.pause, ready: props.ready, restart: props.restart })));
+        react_1.default.createElement(TimerControls, { progress: props.progress, break: props.break, session: props.session, sessionTime: props.sessionTime, current: props.current, end: props.end, start: props.start, pause: props.pause, ready: props.ready, restart: props.restart, tick: props.tick })));
 };
 var AppWrapper = function (props) {
     return (react_1.default.createElement(react_redux_1.Provider, { store: store },
@@ -130,11 +143,13 @@ var mapStateToProps = function (state) {
 var mapDispatchToProps = function (dispatch) {
     return {
         set: function (brk, session) { return dispatch((0, clock_state_js_1.set)(brk, session)); },
-        start: function (brk, session, current) { return dispatch((0, clock_state_js_1.start)(brk, session, current)); },
-        pause: function (brk, session, current) { return dispatch((0, clock_state_js_1.pause)(brk, session, current)); },
+        sessionTime: function (brk, session) { return dispatch((0, clock_state_js_1.sessionTime)(brk, session)); },
+        breakTime: function () { return dispatch((0, clock_state_js_1.breakTime)()); },
+        pause: function (brk, session) { return dispatch((0, clock_state_js_1.pause)(brk, session)); },
         end: function () { return dispatch((0, clock_state_js_1.end)()); },
         restart: function () { return dispatch((0, clock_state_js_1.restart)()); },
-        ready: function (brk, session, current) { return dispatch((0, clock_state_js_1.ready)(brk, session, current)); }
+        ready: function (brk, session) { return dispatch((0, clock_state_js_1.ready)(brk, session)); },
+        tick: function () { return dispatch((0, clock_state_js_1.tick)()); }
     };
 };
 var Container = (0, react_redux_1.connect)(mapStateToProps, mapDispatchToProps)(App);
