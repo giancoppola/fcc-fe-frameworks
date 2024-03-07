@@ -9,9 +9,6 @@ app.use('/sounds', express.static(__dirname + '/sounds'))
 app.use(express.static(__dirname + '/src'));
 
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/views/clock.html')
-})
-app.get('/calculator', (req, res) => {
     res.sendFile(__dirname + '/views/calculator.html')
 })
 app.get('/drums', (req, res) => {
